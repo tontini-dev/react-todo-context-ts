@@ -23,6 +23,15 @@ const TodoItem: React.FC<{ todo: Todo }> = ({ todo }) => {
         <span className={`${todo.completed ? "line-through text-gray-500" : ""}`}>
           {todo.title}
         </span>
+        <span
+          className={`text-xs font-bold px-2 py-1 rounded-full 
+            ${todo.priority === "Alta" ? "bg-red-100 text-red-600" :
+              todo.priority === "Média" ? "bg-yellow-100 text-yellow-600" :
+              "bg-green-100 text-green-600"}
+          `}
+        >
+          {todo.priority}
+        </span>
       </div>
       <button onClick={() => deleteTodo(todo.id)} className="text-red-500 hover:text-red-700">
         ❌

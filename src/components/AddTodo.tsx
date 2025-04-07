@@ -1,44 +1,42 @@
 import { useState } from "react"
-import { useTodoContext } from "../context/TodoContext"
-import toast from "react-hot-toast"
+import { useTodoContext } from "../context/todoContext"
+import { Priority } from "../types/todo"
 
 const AddTodo = () => {
-  const [text, setText] = useState("")
-  const { todos, setTodos, setFilter } = useTodoContext()
+  const { addTodo } = useTodoContext()
+  const [newTodo, setNewTodo] = useState("")
+  const [priority, setPriority] = useState<Priority>("Média")
 
-  const addTodo = () => {
-    const trimmed = text.trim()
-    if (!trimmed) return toast.error("Escribe una tarea válida")
-
-    const newTodo = {
-      userId: 1,
-      id: Date.now(),
-      title: trimmed,
-      completed: false,
-    }
-
-    const updatedTodos = [newTodo, ...todos]
-    setTodos(updatedTodos)
-    setText("")
-    setFilter("all")
-
-    toast.success("¡Tarea añadida!")
+  const handleAdd = () => {
+    if (!newTodo.trim()) return
+    addTodo(newTodo, priority)
+    setNewTodo("")
+    setPriority("Média")
   }
 
   return (
-    <div className="flex gap-2 mb-6">
+    <div className="flex flex-col sm:flex-row gap-2 mt-4">
       <input
         type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Nueva tarea..."
-        className="flex-1 px-4 py-2 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700"
+        placeholder="Nova tarefa"
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        className="border p-2 rounded w-full"
       />
-      <button
-        onClick={addTodo}
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+      <select
+        value={priority}
+        onChange={(e) => setPriority(e.target.value as Priority)}
+        className="border p-2 rounded w-full sm:w-auto"
       >
-        Añadir
+        <option value="Alta">Alta</option>
+        <option value="Média">Media</option>
+        <option value="Baixa">Baja</option>
+      </select>
+      <button
+        onClick={handleAdd}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Adicionar
       </button>
     </div>
   )
